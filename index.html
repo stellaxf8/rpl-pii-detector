@@ -1,0 +1,470 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --red: #cd0000; --red-light: #fff0f0; --red-mid: #ffd6d6; }
+body { font-family: Arial, sans-serif; }
+
+.hero {
+  text-align: center;
+  padding: 28px 24px 24px;
+  border: 1px solid #e0e0e0;
+  border-bottom: none;
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+  background: var(--color-background-primary);
+}
+.hero-icon-wrap {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 52px; height: 52px; border-radius: 14px;
+  background: var(--red-light); border: 1.5px solid var(--red-mid);
+  margin-bottom: 14px;
+}
+.hero-icon-wrap svg { width: 26px; height: 26px; }
+
+.hero h1 {
+  font-size: 22px; font-weight: 700; color: var(--color-text-primary);
+  letter-spacing: -0.01em; margin-bottom: 6px;
+}
+.hero h1 span { color: var(--red); }
+.hero-sub {
+  font-size: 13px; color: var(--color-text-secondary);
+  line-height: 1.6; max-width: 380px; margin: 0 auto 16px;
+}
+.hero-pills { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.hero-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 500; padding: 4px 10px;
+  border-radius: 100px; border: 1px solid #e0e0e0;
+  color: var(--color-text-secondary); background: var(--color-background-secondary);
+}
+.hero-pill i { font-size: 13px; color: var(--red); }
+
+.divider-bar {
+  height: 3px; background: var(--red);
+  border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0;
+}
+
+.body-wrap {
+  border: 1px solid #e0e0e0; border-top: none;
+  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+  padding: 20px; background: var(--color-background-primary);
+  margin-bottom: 1.5rem;
+}
+
+.section-label {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--red); margin-bottom: 8px;
+}
+
+.drop-zone {
+  border: 1.5px dashed #d0d0d0; border-radius: var(--border-radius-md);
+  padding: 1.5rem; text-align: center; cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: var(--color-background-secondary); position: relative; margin-bottom: 1rem;
+}
+.drop-zone:hover, .drop-zone.drag-over { border-color: var(--red); background: var(--red-light); }
+.drop-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.drop-zone i { font-size: 26px; color: var(--red); margin-bottom: 6px; display: block; }
+.drop-zone .dz-main { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+.drop-zone .dz-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 4px; }
+.file-types { display: flex; gap: 6px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.ft-badge {
+  font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 100px;
+  border: 1px solid #e0e0e0; color: var(--color-text-secondary);
+  background: var(--color-background-primary); font-family: Arial, sans-serif;
+}
+
+.or-divider { display: flex; align-items: center; gap: 10px; margin: 1rem 0; }
+.or-divider hr { flex: 1; border: none; border-top: 1px solid #e8e8e8; }
+.or-divider span { font-size: 11px; color: var(--color-text-tertiary); font-weight: 500; letter-spacing: 0.05em; }
+
+textarea {
+  width: 100%; min-height: 110px; resize: vertical;
+  font-size: 13px; font-family: Arial, sans-serif;
+  padding: 10px 12px; border-radius: var(--border-radius-md);
+  border: 1px solid #d8d8d8; background: var(--color-background-primary);
+  color: var(--color-text-primary); line-height: 1.6;
+}
+textarea:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 2px rgba(205,0,0,0.1); }
+textarea::placeholder { color: var(--color-text-tertiary); }
+
+.btn-row { display: flex; gap: 10px; margin-top: 14px; align-items: center; }
+.btn-primary {
+  display: flex; align-items: center; gap: 8px; padding: 10px 22px;
+  background: var(--red); color: #fff; border: none; border-radius: var(--border-radius-md);
+  font-size: 14px; font-weight: 500; font-family: Arial, sans-serif;
+  cursor: pointer; transition: opacity 0.12s, transform 0.1s;
+}
+.btn-primary:hover { opacity: 0.88; }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-ghost {
+  display: flex; align-items: center; gap: 6px; padding: 10px 16px;
+  background: transparent; color: var(--color-text-secondary);
+  border: 1px solid #d8d8d8; border-radius: var(--border-radius-md);
+  font-size: 13px; font-family: Arial, sans-serif; cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+.btn-ghost:hover { background: var(--color-background-secondary); border-color: #bbb; }
+.char-count { font-size: 12px; color: var(--color-text-tertiary); margin-left: auto; }
+
+.results-wrap { margin-top: 1.5rem; }
+.results-topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--color-background-secondary); border: 1px solid #e0e0e0;
+  border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+  padding: 10px 16px;
+}
+.results-topbar-left { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+.results-topbar-left i { color: var(--red); font-size: 18px; }
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #e0e0e0; border-left: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0; }
+.stat-cell { background: var(--color-background-primary); padding: 10px 14px; text-align: center; }
+.stat-cell .stat-num { font-size: 22px; font-weight: 500; }
+.stat-cell .stat-lbl { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+.stat-cell.danger .stat-num { color: var(--red); }
+.stat-cell.warning .stat-num { color: #b45309; }
+.stat-cell.info .stat-num { color: #1d4ed8; }
+.findings-list { border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 var(--border-radius-md) var(--border-radius-md); overflow: hidden; }
+.finding-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; border-top: 1px solid #f0f0f0; background: var(--color-background-primary); transition: background 0.1s; }
+.finding-item:first-child { border-top: none; }
+.finding-item:hover { background: var(--color-background-secondary); }
+.sev-bar { width: 4px; min-height: 40px; border-radius: 2px; flex-shrink: 0; margin-top: 2px; }
+.sev-bar.danger { background: var(--red); }
+.sev-bar.warning { background: #d97706; }
+.sev-bar.info { background: #2563eb; }
+.finding-body { flex: 1; min-width: 0; }
+.finding-head { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; flex-wrap: wrap; }
+.finding-desc { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.sev-badge { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.06em; font-family: Arial, sans-serif; }
+.sev-badge.danger { background: var(--red-light); color: var(--red); }
+.sev-badge.warning { background: #fef3c7; color: #92400e; }
+.sev-badge.info { background: #eff6ff; color: #1e40af; }
+.finding-value { font-family: 'Courier New', monospace; font-size: 12px; background: var(--color-background-secondary); border: 1px solid #e8e8e8; border-radius: 4px; padding: 3px 8px; display: inline-block; color: var(--color-text-primary); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.finding-ctx { font-size: 11px; color: var(--color-text-tertiary); margin-top: 5px; line-height: 1.5; }
+.clean-banner { display: flex; align-items: center; gap: 12px; border: 1px solid #bbf7d0; border-top: none; border-radius: 0 0 var(--border-radius-md) var(--border-radius-md); background: #f0fdf4; color: #166534; padding: 14px 16px; font-size: 14px; font-weight: 500; }
+.clean-banner i { font-size: 20px; }
+.file-active-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 100px; background: var(--red-light); border: 1px solid var(--red-mid); font-size: 12px; color: var(--red); font-weight: 500; margin-bottom: 14px; }
+.loading-state { padding: 20px; text-align: center; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 var(--border-radius-md) var(--border-radius-md); color: var(--color-text-secondary); font-size: 13px; }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/compromise/14.0.2/compromise.min.js"></script>
+
+<div class="hero">
+  <div class="hero-icon-wrap">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2L2 7V11C2 15.5228 5.58172 19.3518 10 20.5V22H14V20.5C18.4183 19.3518 22 15.5228 22 11V7L12 2Z" fill="#cd0000" stroke="#cd0000" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M9 12.5L11 14.5L15 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <h1>PII <span>Scanner</span></h1>
+  <p class="hero-sub">Detect sensitive and financial information in your text or files before submitting to ChatGPT, Claude, or any AI tool.</p>
+  <div class="hero-pills">
+    <span class="hero-pill"><i class="ti ti-cpu" aria-hidden="true"></i> Runs locally in your browser</span>
+    <span class="hero-pill"><i class="ti ti-eye-off" aria-hidden="true"></i> Nothing is uploaded or stored</span>
+    <span class="hero-pill"><i class="ti ti-file-check" aria-hidden="true"></i> PDF, Word, Excel, CSV</span>
+  </div>
+</div>
+<div class="divider-bar"></div>
+
+<div class="body-wrap">
+  <div class="section-label"><i class="ti ti-upload" style="font-size:12px;vertical-align:-1px;" aria-hidden="true"></i> Upload a file</div>
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" accept=".pdf,.docx,.xlsx,.xls,.txt,.csv" />
+    <i class="ti ti-file-upload" aria-hidden="true"></i>
+    <div class="dz-main">Drop your file here, or click to browse</div>
+    <div class="dz-sub">All processing happens locally in your browser</div>
+    <div class="file-types">
+      <span class="ft-badge">PDF</span>
+      <span class="ft-badge">Word</span>
+      <span class="ft-badge">Excel</span>
+      <span class="ft-badge">CSV</span>
+      <span class="ft-badge">TXT</span>
+    </div>
+  </div>
+
+  <div class="or-divider"><hr /><span>OR PASTE TEXT</span><hr /></div>
+
+  <div class="section-label"><i class="ti ti-forms" style="font-size:12px;vertical-align:-1px;" aria-hidden="true"></i> Text input</div>
+  <textarea id="textInput" placeholder="Paste any text here — emails, reports, documents — to check for sensitive data before sending to an AI tool..."></textarea>
+
+  <div class="btn-row">
+    <button class="btn-primary" id="scanBtn">
+      <i class="ti ti-shield-search" aria-hidden="true"></i> Scan for PII
+    </button>
+    <button class="btn-ghost" id="clearBtn">
+      <i class="ti ti-trash" aria-hidden="true"></i> Clear
+    </button>
+    <span class="char-count" id="charCount">0 chars</span>
+  </div>
+</div>
+
+<div class="results-wrap" id="resultsWrap" style="display:none;"></div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const PII_PATTERNS = [
+  { label: 'SSN', severity: 'danger', description: 'Social Security Number', regex: /\b\d{3}-\d{2}-\d{4}\b|\b\d{9}\b(?!\d)/g },
+  { label: 'Credit / debit card', severity: 'danger', description: 'Payment card number', regex: /\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12})\b/g },
+  { label: 'Bank account', severity: 'danger', description: 'Bank account number', regex: /\b(?:account\s*(?:number|#|no\.?)\s*[:\-]?\s*)([0-9]{6,17})\b/gi },
+  { label: 'Routing number', severity: 'danger', description: 'Bank routing number', regex: /\b(?:routing\s*(?:number|#|no\.?)\s*[:\-]?\s*)([0-9]{9})\b/gi },
+  { label: 'IBAN', severity: 'danger', description: 'Intl bank account number', regex: /\b[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}(?:[A-Z0-9]?){0,16}\b/g },
+  { label: 'SWIFT code', severity: 'warning', description: 'SWIFT bank code', regex: /\b[A-Z]{6}[A-Z0-9]{2}(?:[A-Z0-9]{3})?\b/g },
+  { label: 'EIN', severity: 'danger', description: 'Employer Identification Number (US)', regex: /\b\d{2}-\d{7}\b/g },
+  { label: 'Passport / ID', severity: 'danger', description: 'Government ID number', regex: /\b(?:passport\s*(?:number|no\.?|#)?\s*[:\-]?\s*)([A-Z]{1,2}[0-9]{6,9})\b/gi },
+  { label: 'US Driver License', severity: 'danger', description: 'US Driver License number', regex: /\b[A-Z]{1,2}\d{5,7}[A-Z]?\b/g },
+  { label: 'Canadian Driver License', severity: 'danger', description: 'Canadian Driver License', regex: /\b[A-Z]{2}\d{5,7}[A-Z0-9]?\b/g },
+  { label: 'SIN / Social Insurance Number', severity: 'danger', description: 'Canadian Social Insurance Number', regex: /\b\d{3}-\d{3}-\d{3}\b/g },
+  { label: 'Medicare number', severity: 'warning', description: 'Medicare beneficiary ID (US)', regex: /\b(?:medicare\s*(?:number|#)?\s*[:\-]?\s*)([0-9]{10}[A-Z]{1})\b/gi },
+  { label: 'Health Insurance ID', severity: 'warning', description: 'Health insurance ID', regex: /\b(?:health\s*(?:insurance|id|plan|member)?\s*(?:number|#|id)?\s*[:\-]?\s*)([0-9]{8,17})\b/gi },
+  { label: 'LinkedIn profile', severity: 'warning', description: 'LinkedIn URL', regex: /linkedin\.com\/(?:in|company)\/[\w\-]+/gi },
+  { label: 'Website / URL', severity: 'info', description: 'Personal or professional website', regex: /\b(?:https?:\/\/|www\.)(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}\b/gi },
+  { label: 'Dollar amount', severity: 'warning', description: 'Financial amount', regex: /\$\s?\d{1,3}(?:,\d{3})*(?:\.\d{2})?|\b\d{1,3}(?:,\d{3})+(?:\.\d{2})?\s?(?:dollars?|USD)\b/gi },
+  { label: 'Email address', severity: 'warning', description: 'Email address', regex: /\b[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}\b/g },
+  { label: 'Phone number', severity: 'warning', description: 'Phone number', regex: /(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}\b|\b\d{3}[-.\s]\d{3}[-.\s]\d{4}\b/g },
+  { label: 'License plate', severity: 'info', description: 'License plate (US/Canada)', regex: /\b[A-Z]{1,3}\s?\d{3,4}\s?[A-Z]{0,3}\b/g },
+  { label: 'VIN', severity: 'info', description: 'Vehicle Identification Number', regex: /\b[A-HJ-NPR-Z0-9]{17}\b/g },
+  { label: 'Date of birth', severity: 'info', description: 'Date of birth', regex: /\b(?:dob|date of birth|born)[:\s]+\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b/gi },
+  { label: 'Age', severity: 'info', description: 'Person age', regex: /\b(?:age|aged?)[:\s=]+(\d{1,3})\b/gi },
+  { label: 'IP address', severity: 'info', description: 'IP address', regex: /\b(?:\d{1,3}\.){3}\d{1,3}\b/g },
+];
+
+function scanText(text) {
+  const findings = [], seen = new Set();
+  
+  for (const p of PII_PATTERNS) {
+    const rx = new RegExp(p.regex.source, p.regex.flags);
+    let m;
+    while ((m = rx.exec(text)) !== null) {
+      const val = m[0].trim();
+      const key = p.label + '::' + val.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const s = Math.max(0, m.index - 35), e = Math.min(text.length, m.index + val.length + 35);
+      const ctx = (s > 0 ? '...' : '') + text.slice(s, e).replace(/\n/g, ' ') + (e < text.length ? '...' : '');
+      findings.push({ label: p.label, severity: p.severity, value: val, context: ctx, description: p.description });
+    }
+  }
+
+  try {
+    const doc = nlp(text);
+    
+    const places = doc.places().out('array');
+    places.forEach(place => {
+      const key = 'location::' + place.toLowerCase();
+      if (!seen.has(key) && place.length > 2) {
+        seen.add(key);
+        const idx = text.toLowerCase().indexOf(place.toLowerCase());
+        if (idx >= 0) {
+          const s = Math.max(0, idx - 35), e = Math.min(text.length, idx + place.length + 35);
+          const ctx = (s > 0 ? '...' : '') + text.slice(s, e).replace(/\n/g, ' ') + (e < text.length ? '...' : '');
+          findings.push({ label: 'Location', severity: 'info', value: place, context: ctx, description: 'Geographic location' });
+        }
+      }
+    });
+
+    const people = doc.people().out('array');
+    people.forEach(person => {
+      const key = 'person::' + person.toLowerCase();
+      if (!seen.has(key) && person.split(' ').length >= 2 && person.length > 3) {
+        seen.add(key);
+        const idx = text.indexOf(person);
+        if (idx >= 0) {
+          const s = Math.max(0, idx - 35), e = Math.min(text.length, idx + person.length + 35);
+          const ctx = (s > 0 ? '...' : '') + text.slice(s, e).replace(/\n/g, ' ') + (e < text.length ? '...' : '');
+          findings.push({ label: 'Person name', severity: 'warning', value: person, context: ctx, description: 'Full name' });
+        }
+      }
+    });
+
+    const orgs = doc.organizations().out('array');
+    orgs.forEach(org => {
+      const key = 'org::' + org.toLowerCase();
+      if (!seen.has(key) && org.length > 2) {
+        seen.add(key);
+        const idx = text.indexOf(org);
+        if (idx >= 0) {
+          const s = Math.max(0, idx - 35), e = Math.min(text.length, idx + org.length + 35);
+          const ctx = (s > 0 ? '...' : '') + text.slice(s, e).replace(/\n/g, ' ') + (e < text.length ? '...' : '');
+          findings.push({ label: 'Organization', severity: 'info', value: org, context: ctx, description: 'Organization name' });
+        }
+      }
+    });
+  } catch (e) {}
+
+  for (let i = 0; i < text.length; i++) {
+    const match = text.substring(i).match(/\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s*,\s*(BC|AB|SK|MB|ON|QC|NB|NS|PE|NL|YT|NT|NU|AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY)\b/);
+    if (match) {
+      const val = match[0];
+      const key = 'location::' + val.toLowerCase();
+      if (!seen.has(key)) {
+        seen.add(key);
+        const idx = i;
+        const s = Math.max(0, idx - 35), e = Math.min(text.length, idx + val.length + 35);
+        const ctx = (s > 0 ? '...' : '') + text.slice(s, e).replace(/\n/g, ' ') + (e < text.length ? '...' : '');
+        findings.push({ label: 'Location', severity: 'info', value: val, context: ctx, description: 'City and state/province' });
+      }
+    }
+  }
+
+  const zipMatch = text.match(/\b\d{5}(?:-\d{4})?\b/g);
+  if (zipMatch) {
+    zipMatch.forEach(zip => {
+      const key = 'zip::' + zip;
+      if (!seen.has(key)) {
+        seen.add(key);
+        const idx = text.indexOf(zip);
+        if (idx >= 0) {
+          const s = Math.max(0, idx - 35), e = Math.min(text.length, idx + zip.length + 35);
+          const ctx = (s > 0 ? '...' : '') + text.slice(s, e).replace(/\n/g, ' ') + (e < text.length ? '...' : '');
+          findings.push({ label: 'Zip code', severity: 'info', value: zip, context: ctx, description: 'US postal code' });
+        }
+      }
+    });
+  }
+
+  const canadianPostal = text.match(/\b[A-Z]\d[A-Z]\s?\d[A-Z]\d\b/g);
+  if (canadianPostal) {
+    canadianPostal.forEach(postal => {
+      const key = 'postal::' + postal;
+      if (!seen.has(key)) {
+        seen.add(key);
+        const idx = text.indexOf(postal);
+        if (idx >= 0) {
+          const s = Math.max(0, idx - 35), e = Math.min(text.length, idx + postal.length + 35);
+          const ctx = (s > 0 ? '...' : '') + text.slice(s, e).replace(/\n/g, ' ') + (e < text.length ? '...' : '');
+          findings.push({ label: 'Postal code', severity: 'info', value: postal, context: ctx, description: 'Canadian postal code' });
+        }
+      }
+    });
+  }
+
+  return findings;
+}
+
+async function extractText(file) {
+  const n = file.name.toLowerCase();
+  if (n.endsWith('.txt') || n.endsWith('.csv')) return await file.text();
+  if (n.endsWith('.pdf')) {
+    const ab = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
+    let out = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const pg = await pdf.getPage(i);
+      const c = await pg.getTextContent();
+      out += c.items.map(s => s.str).join(' ') + '\n';
+    }
+    return out;
+  }
+  if (n.endsWith('.docx')) {
+    const ab = await file.arrayBuffer();
+    const r = await mammoth.extractRawText({ arrayBuffer: ab });
+    return r.value;
+  }
+  if (n.endsWith('.xlsx') || n.endsWith('.xls')) {
+    const ab = await file.arrayBuffer();
+    const wb = XLSX.read(ab, { type: 'array' });
+    return wb.SheetNames.map(sn => XLSX.utils.sheet_to_csv(wb.Sheets[sn])).join('\n');
+  }
+  throw new Error('Unsupported file type.');
+}
+
+function esc(s) { return s.replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function sevOrder(s) { return { danger: 0, warning: 1, info: 2 }[s] ?? 3; }
+
+function renderResults(findings, fileName) {
+  const wrap = document.getElementById('resultsWrap');
+  wrap.style.display = 'block';
+  const counts = { danger: 0, warning: 0, info: 0 };
+  findings.forEach(f => counts[f.severity] = (counts[f.severity] || 0) + 1);
+  const fileBadge = fileName ? `<div class="file-active-badge"><i class="ti ti-file" aria-hidden="true"></i>${esc(fileName)}</div>` : '';
+
+  if (findings.length === 0) {
+    wrap.innerHTML = `${fileBadge}
+      <div class="results-topbar">
+        <div class="results-topbar-left"><i class="ti ti-shield-check" aria-hidden="true"></i> Scan complete</div>
+        <span style="font-size:12px;color:var(--color-text-tertiary);">0 items</span>
+      </div>
+      <div class="clean-banner"><i class="ti ti-circle-check" aria-hidden="true"></i> No PII detected. This looks safe to submit.</div>`;
+    return;
+  }
+
+  findings.sort((a, b) => sevOrder(a.severity) - sevOrder(b.severity));
+  const cards = findings.map(f => `
+    <div class="finding-item">
+      <div class="sev-bar ${f.severity}"></div>
+      <div class="finding-body">
+        <div class="finding-head">
+          <span class="finding-desc">${esc(f.description)}</span>
+          <span class="sev-badge ${f.severity}">${f.severity}</span>
+        </div>
+        <div class="finding-value">${esc(f.value)}</div>
+        <div class="finding-ctx">${esc(f.context)}</div>
+      </div>
+    </div>`).join('');
+
+  wrap.innerHTML = `${fileBadge}
+    <div class="results-topbar">
+      <div class="results-topbar-left"><i class="ti ti-alert-triangle" aria-hidden="true"></i> ${findings.length} item${findings.length !== 1 ? 's' : ''} flagged</div>
+      <span style="font-size:12px;color:var(--color-text-tertiary);">Review before submitting</span>
+    </div>
+    <div class="stats-row">
+      <div class="stat-cell danger"><div class="stat-num">${counts.danger||0}</div><div class="stat-lbl">High risk</div></div>
+      <div class="stat-cell warning"><div class="stat-num">${counts.warning||0}</div><div class="stat-lbl">Medium risk</div></div>
+      <div class="stat-cell info"><div class="stat-num">${counts.info||0}</div><div class="stat-lbl">Low risk</div></div>
+    </div>
+    <div class="findings-list">${cards}</div>`;
+}
+
+let currentFile = null;
+
+document.getElementById('textInput').addEventListener('input', function() {
+  document.getElementById('charCount').textContent = this.value.length.toLocaleString() + ' chars';
+});
+document.getElementById('fileInput').addEventListener('change', e => {
+  currentFile = e.target.files[0] || null;
+  if (currentFile) document.getElementById('dropZone').querySelector('.dz-main').textContent = currentFile.name;
+});
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f) { currentFile = f; dropZone.querySelector('.dz-main').textContent = f.name; }
+});
+document.getElementById('clearBtn').addEventListener('click', () => {
+  document.getElementById('textInput').value = '';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('charCount').textContent = '0 chars';
+  document.getElementById('resultsWrap').style.display = 'none';
+  dropZone.querySelector('.dz-main').textContent = 'Drop your file here, or click to browse';
+  currentFile = null;
+});
+document.getElementById('scanBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('scanBtn');
+  const textVal = document.getElementById('textInput').value.trim();
+  if (!currentFile && !textVal) { alert('Please upload a file or paste some text first.'); return; }
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader" aria-hidden="true"></i> Scanning...';
+  const wrap = document.getElementById('resultsWrap');
+  wrap.style.display = 'block';
+  wrap.innerHTML = `<div class="results-topbar"><div class="results-topbar-left"><i class="ti ti-loader" aria-hidden="true"></i> Processing...</div></div><div class="loading-state">Reading and scanning your content...</div>`;
+  try {
+    let text = textVal, fileName = null;
+    if (currentFile) {
+      fileName = currentFile.name;
+      const extracted = await extractText(currentFile);
+      text = textVal ? extracted + '\n' + textVal : extracted;
+    }
+    renderResults(scanText(text), fileName);
+  } catch (err) {
+    wrap.innerHTML = `<div class="results-topbar"><div class="results-topbar-left" style="color:var(--red);"><i class="ti ti-alert-circle" aria-hidden="true"></i> Error</div></div><div class="loading-state" style="color:var(--red);">${esc(err.message)}</div>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-shield-search" aria-hidden="true"></i> Scan for PII';
+  }
+});
+</script>
