@@ -1,0 +1,394 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.app { padding: 1.5rem 0; }
+.header { margin-bottom: 1.5rem; }
+.header h1 { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
+.header p { font-size: 14px; color: var(--color-text-secondary); margin-top: 4px; }
+
+.drop-zone {
+  border: 1.5px dashed var(--color-border-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: var(--color-background-secondary);
+  position: relative;
+}
+.drop-zone:hover, .drop-zone.drag-over {
+  border-color: var(--color-border-primary);
+  background: var(--color-background-tertiary);
+}
+.drop-zone input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.drop-zone i { font-size: 28px; color: var(--color-text-tertiary); margin-bottom: 8px; display: block; }
+.drop-zone p { font-size: 14px; color: var(--color-text-secondary); }
+.drop-zone span { font-size: 12px; color: var(--color-text-tertiary); display: block; margin-top: 4px; }
+
+.or-divider { display: flex; align-items: center; gap: 12px; margin: 1rem 0; }
+.or-divider hr { flex: 1; border: none; border-top: 0.5px solid var(--color-border-tertiary); }
+.or-divider span { font-size: 12px; color: var(--color-text-tertiary); }
+
+textarea {
+  width: 100%; min-height: 120px; resize: vertical;
+  font-size: 14px; font-family: var(--font-sans);
+  padding: 10px 12px; border-radius: var(--border-radius-md);
+  border: 0.5px solid var(--color-border-secondary);
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
+}
+textarea:focus { outline: none; border-color: var(--color-border-primary); }
+textarea::placeholder { color: var(--color-text-tertiary); }
+
+.scan-btn {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 1rem; padding: 9px 20px;
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  font-size: 14px; font-weight: 500; color: var(--color-text-primary);
+  cursor: pointer; transition: background 0.12s;
+}
+.scan-btn:hover { background: var(--color-background-secondary); }
+.scan-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.results { margin-top: 1.5rem; }
+.results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.results-header h2 { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+
+.summary-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 100px;
+  font-size: 12px; font-weight: 500;
+  border: 0.5px solid var(--color-border-tertiary);
+}
+.pill.danger { background: var(--color-background-danger); color: var(--color-text-danger); border-color: var(--color-border-danger); }
+.pill.warning { background: var(--color-background-warning); color: var(--color-text-warning); border-color: var(--color-border-warning); }
+.pill.info { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); }
+.pill.success { background: var(--color-background-success); color: var(--color-text-success); border-color: var(--color-border-success); }
+
+.finding-card {
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  background: var(--color-background-primary);
+}
+.finding-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.finding-type { font-size: 12px; font-weight: 500; }
+.finding-type.danger { color: var(--color-text-danger); }
+.finding-type.warning { color: var(--color-text-warning); }
+.finding-type.info { color: var(--color-text-info); }
+.finding-value {
+  font-family: var(--font-mono); font-size: 13px;
+  color: var(--color-text-primary);
+  background: var(--color-background-secondary);
+  padding: 4px 8px; border-radius: var(--border-radius-md);
+  border: 0.5px solid var(--color-border-tertiary);
+  word-break: break-all;
+}
+.finding-context { font-size: 12px; color: var(--color-text-tertiary); margin-top: 6px; }
+
+.clear-btn {
+  font-size: 12px; color: var(--color-text-secondary);
+  background: none; border: none; cursor: pointer; padding: 4px 8px;
+  border-radius: var(--border-radius-md);
+}
+.clear-btn:hover { background: var(--color-background-secondary); }
+
+.clean-state {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; border-radius: var(--border-radius-md);
+  background: var(--color-background-success);
+  border: 0.5px solid var(--color-border-success);
+  color: var(--color-text-success); font-size: 14px;
+}
+
+.file-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: var(--border-radius-md);
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  font-size: 12px; color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+}
+.loading { font-size: 13px; color: var(--color-text-secondary); padding: 1rem 0; text-align: center; }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<div class="app">
+  <h2 class="sr-only">PII detector — paste text or upload a file to scan for sensitive information before submitting to an AI tool</h2>
+  <div class="header">
+    <h1>PII scanner</h1>
+    <p>Check text or files for sensitive information before submitting to an AI tool.</p>
+  </div>
+
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" accept=".pdf,.docx,.xlsx,.xls,.txt,.csv" />
+    <i class="ti ti-upload" aria-hidden="true"></i>
+    <p>Drop a file here or click to browse</p>
+    <span>PDF, Word (.docx), Excel (.xlsx/.xls), TXT, CSV</span>
+  </div>
+
+  <div class="or-divider">
+    <hr /><span>or paste text</span><hr />
+  </div>
+
+  <textarea id="textInput" placeholder="Paste text here to scan..."></textarea>
+
+  <button class="scan-btn" id="scanBtn">
+    <i class="ti ti-shield-search" aria-hidden="true"></i>
+    Scan for PII
+  </button>
+
+  <div class="results" id="results" style="display:none;"></div>
+</div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const PII_PATTERNS = [
+  {
+    label: 'SSN',
+    severity: 'danger',
+    regex: /\b\d{3}-\d{2}-\d{4}\b|\b\d{9}\b(?!\d)/g,
+    description: 'Social Security Number'
+  },
+  {
+    label: 'Credit / debit card number',
+    severity: 'danger',
+    regex: /\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|6(?:011|5[0-9]{2})[0-9]{12})\b/g,
+    description: 'Payment card number'
+  },
+  {
+    label: 'Bank account number',
+    severity: 'danger',
+    regex: /\b(?:account\s*(?:number|#|no\.?)\s*[:\-]?\s*)([0-9]{6,17})\b/gi,
+    description: 'Bank account number'
+  },
+  {
+    label: 'Routing number',
+    severity: 'danger',
+    regex: /\b(?:routing\s*(?:number|#|no\.?)\s*[:\-]?\s*)([0-9]{9})\b/gi,
+    description: 'Bank routing number'
+  },
+  {
+    label: 'Dollar amount',
+    severity: 'warning',
+    regex: /\$\s?\d{1,3}(?:,\d{3})*(?:\.\d{2})?|\b\d{1,3}(?:,\d{3})+(?:\.\d{2})?\s?(?:dollars?|USD)\b/gi,
+    description: 'Financial amount'
+  },
+  {
+    label: 'IBAN',
+    severity: 'danger',
+    regex: /\b[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[0-9]{7}(?:[A-Z0-9]?){0,16}\b/g,
+    description: 'International bank account number'
+  },
+  {
+    label: 'Email address',
+    severity: 'warning',
+    regex: /\b[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}\b/g,
+    description: 'Email address'
+  },
+  {
+    label: 'Phone number',
+    severity: 'warning',
+    regex: /(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}\b/g,
+    description: 'Phone number'
+  },
+  {
+    label: 'Date of birth',
+    severity: 'info',
+    regex: /\b(?:dob|date of birth|born)[:\s]+\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b/gi,
+    description: 'Date of birth'
+  },
+  {
+    label: 'IP address',
+    severity: 'info',
+    regex: /\b(?:\d{1,3}\.){3}\d{1,3}\b/g,
+    description: 'IP address'
+  },
+  {
+    label: 'Passport / ID number',
+    severity: 'danger',
+    regex: /\b(?:passport|passport\s*(?:number|no\.?|#))\s*[:\-]?\s*([A-Z]{1,2}[0-9]{6,9})\b/gi,
+    description: 'Passport or government ID'
+  },
+  {
+    label: 'EIN',
+    severity: 'danger',
+    regex: /\b\d{2}-\d{7}\b/g,
+    description: 'Employer Identification Number'
+  }
+];
+
+function scanText(text) {
+  const findings = [];
+  const seen = new Set();
+  for (const pattern of PII_PATTERNS) {
+    const regex = new RegExp(pattern.regex.source, pattern.regex.flags);
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      const val = match[0].trim();
+      const key = pattern.label + '::' + val.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const start = Math.max(0, match.index - 30);
+      const end = Math.min(text.length, match.index + val.length + 30);
+      const context = (start > 0 ? '...' : '') + text.slice(start, end).replace(/\n/g, ' ') + (end < text.length ? '...' : '');
+      findings.push({ label: pattern.label, severity: pattern.severity, value: val, context, description: pattern.description });
+    }
+  }
+  return findings;
+}
+
+async function extractText(file) {
+  const name = file.name.toLowerCase();
+  if (name.endsWith('.txt') || name.endsWith('.csv')) {
+    return await file.text();
+  }
+  if (name.endsWith('.pdf')) {
+    const ab = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
+    let out = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      out += content.items.map(s => s.str).join(' ') + '\n';
+    }
+    return out;
+  }
+  if (name.endsWith('.docx')) {
+    const ab = await file.arrayBuffer();
+    const result = await mammoth.extractRawText({ arrayBuffer: ab });
+    return result.value;
+  }
+  if (name.endsWith('.xlsx') || name.endsWith('.xls')) {
+    const ab = await file.arrayBuffer();
+    const wb = XLSX.read(ab, { type: 'array' });
+    let out = '';
+    wb.SheetNames.forEach(sn => {
+      const ws = wb.Sheets[sn];
+      out += XLSX.utils.sheet_to_csv(ws) + '\n';
+    });
+    return out;
+  }
+  throw new Error('Unsupported file type');
+}
+
+function severityOrder(s) { return { danger: 0, warning: 1, info: 2 }[s] ?? 3; }
+
+function renderResults(findings, fileName) {
+  const el = document.getElementById('results');
+  el.style.display = 'block';
+
+  if (findings.length === 0) {
+    el.innerHTML = `
+      <div class="results-header"><h2>Scan results</h2></div>
+      ${fileName ? `<div class="file-badge"><i class="ti ti-file" aria-hidden="true"></i>${fileName}</div>` : ''}
+      <div class="clean-state">
+        <i class="ti ti-shield-check" style="font-size:20px;" aria-hidden="true"></i>
+        No PII detected. Looks clean.
+      </div>`;
+    return;
+  }
+
+  findings.sort((a, b) => severityOrder(a.severity) - severityOrder(b.severity));
+
+  const counts = { danger: 0, warning: 0, info: 0 };
+  findings.forEach(f => counts[f.severity] = (counts[f.severity] || 0) + 1);
+
+  const pillsHtml = [
+    counts.danger > 0 ? `<span class="pill danger"><i class="ti ti-alert-triangle" aria-hidden="true"></i>${counts.danger} high risk</span>` : '',
+    counts.warning > 0 ? `<span class="pill warning"><i class="ti ti-alert-circle" aria-hidden="true"></i>${counts.warning} medium risk</span>` : '',
+    counts.info > 0 ? `<span class="pill info"><i class="ti ti-info-circle" aria-hidden="true"></i>${counts.info} low risk</span>` : ''
+  ].join('');
+
+  const cardsHtml = findings.map(f => `
+    <div class="finding-card">
+      <div class="finding-top">
+        <span class="finding-type ${f.severity}">${f.description}</span>
+        <span class="pill ${f.severity}" style="font-size:11px;">${f.label}</span>
+      </div>
+      <div class="finding-value">${f.value.replace(/</g, '&lt;')}</div>
+      <div class="finding-context">${f.context.replace(/</g, '&lt;')}</div>
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div class="results-header">
+      <h2>Scan results — ${findings.length} item${findings.length !== 1 ? 's' : ''} found</h2>
+      <button class="clear-btn" id="clearBtn"><i class="ti ti-x" aria-hidden="true"></i> Clear</button>
+    </div>
+    ${fileName ? `<div class="file-badge"><i class="ti ti-file" aria-hidden="true"></i>${fileName}</div>` : ''}
+    <div class="summary-pills">${pillsHtml}</div>
+    ${cardsHtml}`;
+
+  document.getElementById('clearBtn').onclick = () => {
+    el.style.display = 'none';
+    document.getElementById('textInput').value = '';
+    document.getElementById('fileInput').value = '';
+    currentFile = null;
+    document.getElementById('dropZone').querySelector('p').textContent = 'Drop a file here or click to browse';
+  };
+}
+
+let currentFile = null;
+
+document.getElementById('fileInput').addEventListener('change', e => {
+  currentFile = e.target.files[0] || null;
+  if (currentFile) {
+    document.getElementById('dropZone').querySelector('p').textContent = currentFile.name;
+  }
+});
+
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f) { currentFile = f; dropZone.querySelector('p').textContent = f.name; }
+});
+
+document.getElementById('scanBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('scanBtn');
+  const textVal = document.getElementById('textInput').value.trim();
+
+  if (!currentFile && !textVal) {
+    alert('Please upload a file or paste some text first.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader" aria-hidden="true"></i> Scanning...';
+
+  const results = document.getElementById('results');
+  results.style.display = 'block';
+  results.innerHTML = '<div class="loading"><i class="ti ti-loader" aria-hidden="true"></i> Reading file...</div>';
+
+  try {
+    let text = textVal;
+    let fileName = null;
+    if (currentFile) {
+      fileName = currentFile.name;
+      text = await extractText(currentFile);
+      if (textVal) text += '\n' + textVal;
+    }
+    const findings = scanText(text);
+    renderResults(findings, fileName);
+  } catch (err) {
+    results.innerHTML = `<div class="finding-card"><span class="finding-type danger">Error: ${err.message}</span></div>`;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-shield-search" aria-hidden="true"></i> Scan for PII';
+  }
+});
+</script>
